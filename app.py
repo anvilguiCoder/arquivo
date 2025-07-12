@@ -319,7 +319,6 @@ def exportar_excel():
 
     return send_file(caminho_excel, as_attachment=True)
 
-
 # --- Rota 7: Exportar PDF com tabela formatada ---
 @app.route('/exportar/pdf')
 def exportar_pdf():

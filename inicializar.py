@@ -42,8 +42,8 @@ def inicializar_admin():
     """
     Cria o usuário admin no banco se ainda não existir.
     """
-    usuario_admin = os.environ.get("ADMIN_USER", "admin").strip()
-    senha_admin = os.environ.get("ADMIN_PASSWORD", "admin123").strip()
+    usuario_admin = (os.environ.get("ADMIN_USER") or "admin").strip()
+    senha_admin = (os.environ.get("ADMIN_PASSWORD") or "admin123").strip()
     senha_hash = generate_password_hash(senha_admin)
 
     conn = get_db()
