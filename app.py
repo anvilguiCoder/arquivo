@@ -7,6 +7,7 @@ from fpdf import FPDF
 from utils import validar_cpf, validar_data
 from datetime import datetime
 from werkzeug.security import check_password_hash  # certifique-se de importar isso
+from scripts_usuarios.inicializar import inicializar_admin
 
 load_dotenv()
 
@@ -431,4 +432,5 @@ def logout():
 
 # --- Execução ---
 if __name__ == '__main__':
+    inicializar_admin()
     app.run(debug=True)
