@@ -11,6 +11,10 @@ from db import get_db
 
 load_dotenv()
 
+from inicializar import criar_tabelas, inicializar_admin
+criar_tabelas()
+inicializar_admin()
+
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "chave-padrao-insegura")
 
@@ -427,6 +431,4 @@ def logout():
 
 # --- Execução ---
 if __name__ == '__main__':
-    from inicializar import inicializar_admin
-    inicializar_admin()
     app.run(debug=True)
