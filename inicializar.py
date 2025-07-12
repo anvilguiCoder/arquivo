@@ -42,23 +42,24 @@ def inicializar_admin():
     """
     Cria o usuário admin no banco se ainda não existir.
     """
-    senha_admin = os.environ.get("ADMIN_SENHA", "admin123").strip()
+    usuario_admin = os.environ.get("ADMIN_USER", "admin").strip()
+    senha_admin = os.environ.get("ADMIN_PASSWORD", "admin123").strip()
     senha_hash = generate_password_hash(senha_admin)
 
     conn = get_db()
     cursor = conn.cursor()
 
     try:
-        cursor.execute("SELECT 1 FROM usuarios WHERE usuario = ?", ("admin",))
+        cursor.execute("SELECT 1 FROM usuarios WHERE usuario = ?", (usuario_admin,))
         if cursor.fetchone() is None:
             cursor.execute("""
                 INSERT INTO usuarios (usuario, senha, tipo)
                 VALUES (?, ?, ?)
-            """, ("admin", senha_hash, "admin"))
+            """, (usuario_admin, senha_hash, "admin"))
             conn.commit()
-            print("Usuário admin criado.")
+            print(f"Usuário admin '{usuario_admin}' criado.")
         else:
-            print("Usuário admin já existe.")
+            print(f"Usuário admin '{usuario_admin}' já existe.")
     except Exception as e:
         print(f"[ERRO] Falha ao inicializar admin: {e}")
     finally:
