@@ -1,16 +1,19 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash, send_file
 import sqlite3
 import os
+from dotenv import load_dotenv
 import pandas as pd
 from fpdf import FPDF
 from utils import validar_cpf, validar_data
 from datetime import datetime
 from werkzeug.security import check_password_hash  # certifique-se de importar isso
 
-app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'
+load_dotenv()
 
-CAMINHO_BANCO = os.path.join("dados", "banco.sqlite")
+app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "chave-padrao-insegura")
+
+CAMINHO_BANCO = os.getenv("DB_PATH", os.path.join("dados", "banco.sqlite"))
 
 # --- Funções auxiliares ---
 def get_db():

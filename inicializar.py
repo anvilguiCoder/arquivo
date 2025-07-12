@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash
-from database import get_db
+from app import get_db
 import os
 
 def inicializar_admin():
