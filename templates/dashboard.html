@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center">
+    <h2>Bem-vindo(a), {{ usuario }}!</h2>
+
+    <div class="d-flex justify-content-center gap-3 mb-4">
+        {% if tipo == 'admin' %}
+            <a href="{{ url_for('cadastrar') }}" class="btn btn-primary">Cadastrar Aluno</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-secondary">Sair</a>
+    </div>
+
+    <form method="GET" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <input type="text" name="nome" value="{{ nome }}" class="form-control" placeholder="Nome">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="data_nascimento" value="{{ data_nascimento }}" class="form-control" placeholder="dd/mm/aaaa">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="cpf" value="{{ cpf }}" class="form-control" placeholder="CPF">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="numero_caixa" value="{{ numero_caixa }}" class="form-control" placeholder="Número da Caixa">
+            </div>
+        </div>
+        <div class="d-flex justify-content-center gap-2">
+            <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+            <a href="{{ url_for('dashboard', limpar=1) }}" class="btn btn-secondary mt-2">Limpar</a>
+        </div>
+    </form>
+
+    {% if alunos %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        {% macro sort_header(label, field) %}
+                            <th>
+                                <a href="{{ url_for('dashboard', ordem=field, direcao='desc' if ordem == field and direcao == 'asc' else 'asc', nome=nome, data_nascimento=data_nascimento, cpf=cpf, numero_caixa=numero_caixa) }}" class="sort-link">
+                                    {{ label }}
+                                    {% if ordem == field %}
+                                        {% if direcao == 'asc' %}
+                                            <span class="sort-icons sort-active">▲</span><span class="sort-icons sort-muted">▼</span>
+                                        {% else %}
+                                            <span class="sort-icons sort-muted">▲</span><span class="sort-icons sort-active">▼</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="sort-icons sort-muted">▲▼</span>
+                                    {% endif %}
+                                </a>
+                            </th>
+                        {% endmacro %}
+
+                        {{ sort_header('Nome', 'nome') }}
+                        {{ sort_header('Data de Nascimento', 'data_nascimento') }}
+                        {{ sort_header('CPF', 'cpf') }}
+                        {{ sort_header('Caixa', 'numero_caixa') }}
+
+                        {% if tipo == 'admin' %}
+                            <th>Ações</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for aluno in alunos %}
+                        <tr>
+                            <td>{{ aluno[1] }}</td>
+                            <td>{{ aluno[2] }}</td>
+                            <td>{{ aluno[3] }}</td>
+                            <td>{{ aluno[4] }}</td>
+                            {% if tipo == 'admin' %}
+                                <td class="actions">
+                                    <a href="{{ url_for('editar', id=aluno[0]) }}" class="btn btn-secondary btn-sm">Editar</a>
+                                    <a href="{{ url_for('excluir', id=aluno[0]) }}" class="btn btn-danger btn-sm">Excluir</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-center gap-3">
+            <a href="{{ url_for('exportar_excel', nome=nome, data_nascimento=data_nascimento, cpf=cpf, numero_caixa=numero_caixa) }}" class="btn btn-success">Exportar Excel</a>
+            <a href="{{ url_for('exportar_pdf', ordem=ordem, direcao=direcao, nome=nome, data_nascimento=data_nascimento, cpf=cpf, numero_caixa=numero_caixa) }}" class="btn btn-warning">Exportar PDF</a>
+        </div>
+          
+    {% else %}
+        <p>Nenhum aluno encontrado.</p>
+    {% endif %}
+</div>
+{% endblock %}

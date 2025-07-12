@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center">
+    <h2>Confirmação de Exclusão</h2>
+    <p>Tem certeza que deseja excluir o aluno <strong>{{ aluno[1] }}</strong> (Nascimento: {{ aluno[2] }} | CPF: {{ aluno[3] }})?</p>
+
+    <form method="POST" class="mt-4">
+        <button type="submit" class="btn btn-danger">Sim, excluir</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

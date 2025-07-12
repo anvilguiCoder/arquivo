@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Cadastro de Aluno</h2>
+
+  <form method="post" action="{{ url_for('cadastrar') }}">
+    <div class="form-group mb-3">
+      <label>Nome completo</label>
+      <input type="text" name="nome" class="form-control" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Data de nascimento</label>
+      <input type="text" name="data_nascimento" class="form-control" placeholder="dd/mm/aaaa" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>CPF</label>
+      <input type="text" name="cpf" class="form-control" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Número da caixa</label>
+      <input type="text" name="numero_caixa" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Cancelar</a>
+  </form>
+{% endblock %}

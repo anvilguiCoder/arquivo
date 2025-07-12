@@ -1,0 +1,21 @@
+.sort-link {
+  color: white;
+  text-decoration: none;
+}
+
+.sort-link:hover {
+  text-decoration: underline;
+}
+
+.sort-icons {
+  font-size: 0.8rem;
+  margin-left: 5px;
+}
+
+.sort-active {
+  font-weight: bold;
+}
+
+.sort-muted {
+  color: #ccc;
+}

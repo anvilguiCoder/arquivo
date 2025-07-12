@@ -1,0 +1,88 @@
+.password-wrapper {
+  position: relative;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 3px;
+  top: 55%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  cursor: pointer;
+  color: #bbb;
+  z-index: 2;
+  transition: color 0.2s ease;
+}
+
+.eye-icon:hover {
+  color: #ffffff;
+}
+
+.extras {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  padding: 0 2px;
+}
+
+.extras a {
+  color: #ccc;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.extras a:hover {
+  text-decoration: underline;
+}
+
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 25px;
+  color: #007bff;
+}
+
+.login-card form > div {
+  margin-bottom: 18px;
+}
+
+form div {
+  text-align: left;
+}
+
+@media (max-width: 400px) {
+  .login-card {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .login-card h2 {
+    font-size: 1.5rem;
+  }
+
+  input, button {
+    font-size: 0.95rem;
+  }
+}
+
+#senha {
+  margin-bottom: 4px;
+}
