@@ -7,6 +7,9 @@ load_dotenv()
 # Caminho padrão para o banco de dados
 CAMINHO_BANCO = os.getenv("DB_PATH", os.path.join("dados", "banco.sqlite"))
 
+# Cria a pasta onde o banco será salvo, se não existir
+os.makedirs(os.path.dirname(CAMINHO_BANCO), exist_ok=True)
+
 def get_db():
     """
     Retorna uma conexão com o banco de dados SQLite.
