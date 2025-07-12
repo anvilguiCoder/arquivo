@@ -7,19 +7,14 @@ from fpdf import FPDF
 from utils import validar_cpf, validar_data
 from datetime import datetime
 from werkzeug.security import check_password_hash  # certifique-se de importar isso
-from inicializar import inicializar_admin
+from db import get_db
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "chave-padrao-insegura")
 
-CAMINHO_BANCO = os.getenv("DB_PATH", os.path.join("dados", "banco.sqlite"))
-
 # --- Funções auxiliares ---
-def get_db():
-    return sqlite3.connect(CAMINHO_BANCO)
-
 def autenticar_usuario(usuario, senha):
     conn = get_db()
     cursor = conn.cursor()
@@ -432,5 +427,6 @@ def logout():
 
 # --- Execução ---
 if __name__ == '__main__':
+    from inicializar import inicializar_admin
     inicializar_admin()
     app.run(debug=True)
