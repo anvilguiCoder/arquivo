@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash, send_file
 import os
 from dotenv import load_dotenv
-import pandas as pd
+from openpyxl import Workbook
 from utils import validar_cpf, validar_data
 from datetime import datetime
 from werkzeug.security import check_password_hash
@@ -293,8 +293,6 @@ def excluir(id):
 
     return render_template("excluir.html", aluno=aluno)
 
-# --- Rota 6: Exportar Excel ---
-# --- Rota 6: Exportar Excel ---
 @app.route('/exportar/excel')
 def exportar_excel():
     from psycopg2.extras import RealDictCursor
@@ -302,17 +300,15 @@ def exportar_excel():
     filtros = []
     valores = []
 
-    # Obter filtros da URL (GET)
+    # Obter filtros
     nome = request.args.get('nome', '').strip()
     data_nascimento = request.args.get('data_nascimento', '').strip()
     cpf = request.args.get('cpf', '').strip()
     numero_caixa = request.args.get('numero_caixa', '').strip()
 
-    # Aplicar filtros
     if nome:
         filtros.append("nome ILIKE %s")
         valores.append(f"%{nome}%")
-
     if data_nascimento:
         try:
             data_sql = datetime.strptime(data_nascimento, '%d/%m/%Y').strftime('%Y-%m-%d')
@@ -320,38 +316,47 @@ def exportar_excel():
             valores.append(data_sql)
         except ValueError:
             pass
-
     if cpf:
         filtros.append("cpf = %s")
         valores.append(cpf)
-
     if numero_caixa:
         filtros.append("numero_caixa = %s")
         valores.append(numero_caixa)
 
-    # Construir query
     query = "SELECT nome, data_nascimento, cpf, numero_caixa FROM alunos"
     if filtros:
         query += " WHERE " + " AND ".join(filtros)
 
-    # Conectar ao banco e buscar dados com nomes das colunas
     conn = get_db()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute(query, valores)
     dados = cursor.fetchall()
     conn.close()
 
-    # Converter para DataFrame
-    df = pd.DataFrame(dados)
+    # Criar workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Alunos"
 
-    if not df.empty:
-        df["data_nascimento"] = pd.to_datetime(df["data_nascimento"]).dt.strftime('%d/%m/%Y')
-        df["cpf"] = df["cpf"].apply(formatar_cpf)
+    # Cabeçalhos
+    colunas = ["Nome", "Data de Nascimento", "CPF", "Número da Caixa"]
+    ws.append(colunas)
 
-    # Salvar como Excel
+    # Adicionar dados
+    for linha in dados:
+        data_formatada = datetime.strptime(str(linha["data_nascimento"]), '%Y-%m-%d').strftime('%d/%m/%Y')
+        cpf_formatado = formatar_cpf(linha["cpf"])
+        ws.append([
+            linha["nome"],
+            data_formatada,
+            cpf_formatado,
+            linha["numero_caixa"]
+        ])
+
+    # Salvar arquivo
     os.makedirs("dados", exist_ok=True)
     caminho_excel = os.path.join("dados", "alunos.xlsx")
-    df.to_excel(caminho_excel, index=False)
+    wb.save(caminho_excel)
 
     return send_file(caminho_excel, as_attachment=True)
 
