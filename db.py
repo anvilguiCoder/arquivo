@@ -1,22 +1,22 @@
-import sqlite3
 import os
 from dotenv import load_dotenv
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 load_dotenv()
 
-# Caminho padrão para o banco de dados
-CAMINHO_BANCO = os.getenv("DB_PATH", os.path.join("dados", "banco.sqlite"))
-
-# Cria a pasta onde o banco será salvo, se não existir
-os.makedirs(os.path.dirname(CAMINHO_BANCO), exist_ok=True)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 def get_db():
     """
-    Retorna uma conexão com o banco de dados SQLite.
+    Retorna uma conexão com o banco de dados PostgreSQL.
     """
+    if not DATABASE_URL:
+        raise ValueError("DATABASE_URL não está definida nas variáveis de ambiente.")
+
     try:
-        conn = sqlite3.connect(CAMINHO_BANCO)
+        conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
         return conn
-    except sqlite3.Error as e:
-        print(f"[ERRO] Falha ao conectar ao banco: {e}")
+    except Exception as e:
+        print(f"[ERRO] Falha ao conectar ao PostgreSQL: {e}")
         raise
