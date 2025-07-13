@@ -8,3 +8,6 @@ services:
     branch: main
     runtime: python
     region: oregon
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
