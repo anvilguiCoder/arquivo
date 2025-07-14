@@ -31,6 +31,15 @@ try:
     except psycopg2.errors.DuplicateColumn:
         print("⚠️ A coluna 'status' já existe no banco.")
         conn.rollback()
+        
+    # Adicionar coluna senha_hash
+    try:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN senha_hash VARCHAR(255);")
+        print("✅ Coluna 'senha_hash' adicionada com sucesso.")
+    except psycopg2.errors.DuplicateColumn:
+        print("⚠️ A coluna 'senha_hash' já existe no banco.")
+        conn.rollback()
+        
 
     conn.commit()
 
