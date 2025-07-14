@@ -466,5 +466,9 @@ def logout():
     return redirect(url_for('login'))
 
 # --- Execução ---
+# app.py temporário para ajustar a coluna no banco de dados
+import ajustar_banco
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("Rodando ajuste no banco pela Render...")
+
