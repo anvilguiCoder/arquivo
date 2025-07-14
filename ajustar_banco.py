@@ -8,12 +8,32 @@ try:
     conn = psycopg2.connect(os.getenv("DATABASE_URL"))
     cursor = conn.cursor()
 
-    cursor.execute("ALTER TABLE usuarios ADD COLUMN nome VARCHAR(100);")
+    # Adicionar coluna nome
+    try:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN nome VARCHAR(100);")
+        print("✅ Coluna 'nome' adicionada com sucesso.")
+    except psycopg2.errors.DuplicateColumn:
+        print("⚠️ A coluna 'nome' já existe no banco.")
+        conn.rollback()
+
+    # Adicionar coluna email
+    try:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN email VARCHAR(100);")
+        print("✅ Coluna 'email' adicionada com sucesso.")
+    except psycopg2.errors.DuplicateColumn:
+        print("⚠️ A coluna 'email' já existe no banco.")
+        conn.rollback()
+
+    # Adicionar coluna status
+    try:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN status VARCHAR(20) DEFAULT 'ativo';")
+        print("✅ Coluna 'status' adicionada com sucesso.")
+    except psycopg2.errors.DuplicateColumn:
+        print("⚠️ A coluna 'status' já existe no banco.")
+        conn.rollback()
+
     conn.commit()
 
-    print("✅ Coluna 'nome' adicionada com sucesso.")
-except psycopg2.errors.DuplicateColumn:
-    print("⚠️ A coluna 'nome' já existe no banco.")
 except Exception as e:
     print("❌ Erro ao ajustar banco:", e)
 finally:
